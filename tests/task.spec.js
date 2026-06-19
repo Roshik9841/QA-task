@@ -8,8 +8,8 @@ test('Sign up',async({page})=>{
         await page.getByText("Continue").click();
         await page.getByLabel("First Name").fill("Roshik");
         await page.getByLabel("Last Name").fill("Maharjan");
-        await page.getByLabel("Email Address").fill("roshik@mail7.app");
-        await page.locator('[name="phoneNumber"]').fill("1");
+        await page.getByLabel("Email Address").fill("abcdefg@yopmail.com");
+        await page.locator('[name="phoneNumber"]').fill("1020102110");
         await page.locator("[name='password']").fill("Roshik@123");
         await page.locator("[name='confirmPassword']").fill("Roshik@123");
         await page.getByRole("button",{name:"Next"}).click();
@@ -25,24 +25,24 @@ test('Sign up',async({page})=>{
         await page.getByPlaceholder("Search...").pressSequentially("Nep");
         await page.getByText("Nepal").click();
         await page.getByRole("button",{name:"Next"}).click();
-        await page.waitFor();
-        await page.locator('type="combobox"]').click();
+        await page.locator(".pb-6").waitFor();
+        await page.locator('[role="combobox"]').click();
         await page.locator('select').selectOption("1");
         await page.getByPlaceholder("Enter an approximate number.").fill("10");
         await page.getByLabel("Focus Area").fill("College Student");
-        await page.getByLabel("Success Metrics").fill("80%");
+        await page.getByLabel("Success Metrics").fill("80");
         await page.locator('[role="checkbox"]').nth(0).check();
         await page.locator('[role="checkbox"]').nth(1).check();
         await page.getByRole("button",{name:"Next"}).click();
-        await page.waitFor();
+    
         await page.getByPlaceholder("Enter your registration number").fill("12345");
-        await page.locator('type="combobox"]').click();
+        await page.locator('[role="combobox"]').click();
         await page.getByText("Nepal").click();
         await page.locator("[role='checkbox']").first().check();
         await page.locator("[role='checkbox']").last().check();
         await page.getByLabel("Certification Details (Optional)").fill("ABC certificate");
-         await page.locator("[role='presentation']").first().setInputFiles("E:/Downloads/abc.pdf");
-           await page.locator("[role='presentation']").last().setInputFiles("E:/Downloads/abc.pdf");
+         await page.locator("[type='file']").first().setInputFiles("E:/Downloads/abc.pdf");
+           await page.locator("[type='file']").last().setInputFiles("E:/Downloads/abc.pdf");
            await page.getByText("Submit").click();
 
 
