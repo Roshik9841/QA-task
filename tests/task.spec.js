@@ -34,6 +34,16 @@ test('Sign up',async({page})=>{
         await page.locator('[role="checkbox"]').nth(0).check();
         await page.locator('[role="checkbox"]').nth(1).check();
         await page.getByRole("button",{name:"Next"}).click();
+        await page.waitFor();
+        await page.getByPlaceholder("Enter your registration number").fill("12345");
+        await page.locator('type="combobox"]').click();
+        await page.getByText("Nepal").click();
+        await page.locator("[role='checkbox']").first().check();
+        await page.locator("[role='checkbox']").last().check();
+        await page.getByLabel("Certification Details (Optional)").fill("ABC certificate");
+         await page.locator("[role='presentation']").first().setInputFiles("E:/Downloads/abc.pdf");
+           await page.locator("[role='presentation']").last().setInputFiles("E:/Downloads/abc.pdf");
+           await page.getByText("Submit").click();
 
 
     
