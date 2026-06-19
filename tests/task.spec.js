@@ -25,6 +25,15 @@ test('Sign up',async({page})=>{
         await page.getByPlaceholder("Search...").pressSequentially("Nep");
         await page.getByText("Nepal").click();
         await page.getByRole("button",{name:"Next"}).click();
+        await page.waitFor();
+        await page.locator('type="combobox"]').click();
+        await page.locator('select').selectOption("1");
+        await page.getByPlaceholder("Enter an approximate number.").fill("10");
+        await page.getByLabel("Focus Area").fill("College Student");
+        await page.getByLabel("Success Metrics").fill("80%");
+        await page.locator('[role="checkbox"]').nth(0).check();
+        await page.locator('[role="checkbox"]').nth(1).check();
+        await page.getByRole("button",{name:"Next"}).click();
 
 
     
