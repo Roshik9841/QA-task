@@ -1,6 +1,23 @@
 import {test,expect} from '@playwright/test';
 
-test('Sign up',async({page})=>{
+async function getOtp(request, email) {
+    for (let i = 0; i < 25; i++) {
+        const res = await request.get(`https://api.catchmail.io/api/v1/mailbox?address=${email}`);
+        const { messages } = res.ok() ? await res.json() : {};
+        if (messages?.length) {
+            const detail = await request.get(`https://api.catchmail.io/api/v1/message/${messages[0].id}?mailbox=${email}`);
+            const { body } = await detail.json();
+            const text = body?.text || body?.html || '';
+            const match = text.match(/code:\s*(\d{6})/i) || text.match(/\b\d{6}\b/);
+            if (match) return match[1] || match[0];
+        }
+        await new Promise(r => setTimeout(r, 1500));
+    }
+    throw new Error('OTP not found');
+}
+
+test('Sign up',async({page,request})=>{
+        test.setTimeout(90000);
 
         await page.goto("https://authorized-partner.vercel.app/");
         await page.getByRole("button",{name:"Get Started"}).first().click();
@@ -8,13 +25,16 @@ test('Sign up',async({page})=>{
         await page.getByText("Continue").click();
         await page.getByLabel("First Name").fill("Roshik");
         await page.getByLabel("Last Name").fill("Maharjan");
-        await page.getByLabel("Email Address").fill("abcdefg@yopmail.com");
-        await page.locator('[name="phoneNumber"]').fill("1020102110");
+        const tempEmail = `vrit_test_${Math.floor(100000 + Math.random() * 900000)}@catchmail.io`;
+        await page.getByLabel("Email Address").fill(tempEmail);
+        const number = Math.random();
+        await page.locator('[name="phoneNumber"]').fill(`${number}`);
         await page.locator("[name='password']").fill("Roshik@123");
         await page.locator("[name='confirmPassword']").fill("Roshik@123");
         await page.getByRole("button",{name:"Next"}).click();
         await page.waitForLoadState("networkidle");
-        await page.locator("[autocomplete='one-time-code']").fill("123456");
+        const otpCode = await getOtp(request, tempEmail);
+        await page.locator("[autocomplete='one-time-code']").fill(otpCode);
         await page.locator("[type='submit']").click();
         await page.getByLabel("Name").fill("Abc company");
         await page.getByLabel("Role in Agency").fill("QA");
